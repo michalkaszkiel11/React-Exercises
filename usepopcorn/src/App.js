@@ -1,14 +1,14 @@
 import { Navbar } from "./Navbar/Navbar";
-import { Main } from "./Main";
+import { Main } from "./Main/Main";
 import { useState } from "react";
 import { Search } from "./Navbar/Search";
 import { NumResults } from "./Navbar/NumResults";
 import { Box } from "./ListBox";
+import { MovieList } from "./Main/MovieList/MovieList";
+import { WatchedSummary } from "./Main/Watched/WatchedSummary";
+import { WatchedMoviesList } from "./Main/Watched/WatchedMoviesList";
+import { StarRating } from "./StarRating";
 
-import { MovieList } from "./MovieList";
-import { WatchedSummary } from "./WatchedSummary";
-import { WatchedMoviesList } from "./WatchedMoviesList";
-import { WatchedMovie } from "./WatchedMovie";
 const tempMovieData = [
     {
         imdbID: "tt1375666",
@@ -67,6 +67,9 @@ export default function App() {
                 <Box>
                     <WatchedSummary watched={watched} />
                     <WatchedMoviesList watched={watched} />
+                </Box>
+                <Box>
+                    <StarRating defaultRating={1} maxRating={10} />
                 </Box>
             </Main>
         </>
