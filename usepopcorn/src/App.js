@@ -68,6 +68,10 @@ export default function App() {
         } catch (e) {
             console.error(e);
         }
+        if (query < 3) {
+            setMovies([]);
+            return;
+        }
     }
     useEffect(() => {
         fetching();
