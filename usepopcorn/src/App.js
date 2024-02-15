@@ -8,6 +8,7 @@ import { MovieList } from "./Main/MovieList/MovieList";
 import { WatchedSummary } from "./Main/Watched/WatchedSummary";
 import { WatchedMoviesList } from "./Main/Watched/WatchedMoviesList";
 import { StarRating } from "./StarRating";
+import { useEffect } from "react";
 
 const tempMovieData = [
     {
@@ -51,13 +52,31 @@ const tempWatchedData = [
     },
 ];
 
+const apiKey = "9fef7c80";
 export default function App() {
-    const [movies, setMovies] = useState(tempMovieData);
+    const [query, setQuery] = useState("");
+    const [movies, setMovies] = useState([]);
     const [watched, setWatched] = useState(tempWatchedData);
+
+    async function fetching() {
+        try {
+            const res = await fetch(
+                `http://www.omdbapi.com/?apikey=${apiKey}&s=${query}`
+            );
+            const data = await res.json();
+            setMovies(data.Search);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    useEffect(() => {
+        fetching();
+    }, [query]);
+
     return (
         <>
             <Navbar>
-                <Search />
+                <Search query={query} setQuery={setQuery} />
                 <NumResults movies={movies} />
             </Navbar>
             <Main>
