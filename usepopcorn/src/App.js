@@ -7,30 +7,8 @@ import { Box } from "./ListBox";
 import { MovieList } from "./Main/MovieList/MovieList";
 import { WatchedSummary } from "./Main/Watched/WatchedSummary";
 import { WatchedMoviesList } from "./Main/Watched/WatchedMoviesList";
-import { StarRating } from "./StarRating";
 import { useEffect } from "react";
-import { MovieDetails } from "./Main/MovieDetails";
-
-// const tempMovieData = [
-//     {
-//         imdbID: "tt1375666",
-//         Title: "Inception",
-//         Year: "2010",
-//         Poster: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-//     },
-//     {
-//         imdbID: "tt0133093",
-//         Title: "The Matrix",
-//         Year: "1999",
-//         Poster: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-//     },
-//     {
-//         imdbID: "tt6751668",
-//         Title: "Parasite",
-//         Year: "2019",
-//         Poster: "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-//     },
-// ];
+import { MovieDetails } from "./Main/MovieDetails/MovieDetails";
 
 const tempWatchedData = [
     {
@@ -59,6 +37,22 @@ export default function App() {
     const [movies, setMovies] = useState([]);
     const [watched, setWatched] = useState(tempWatchedData);
     const [selectedId, setSelectedId] = useState(null);
+    const [selectedMovie, setSelectedMovie] = useState([]);
+
+    async function getSelectedMovie(id) {
+        try {
+            const res = await fetch(
+                `http://www.omdbapi.com/?apikey=${apiKey}&i=${id}`
+            );
+            const data = await res.json();
+            setSelectedMovie(data);
+            console.log(selectedMovie);
+            console.log(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     async function fetching() {
         try {
             const res = await fetch(
@@ -77,6 +71,9 @@ export default function App() {
     useEffect(() => {
         fetching();
     }, [query]);
+    useEffect(() => {
+        getSelectedMovie(selectedId);
+    }, [selectedId]);
 
     return (
         <>
@@ -90,16 +87,16 @@ export default function App() {
                 </Box>
                 <Box>
                     {selectedId ? (
-                        <MovieDetails selectedId={selectedId} />
+                        <MovieDetails
+                            selectedId={selectedId}
+                            selectedMovie={selectedMovie}
+                        />
                     ) : (
                         <>
                             <WatchedSummary watched={watched} />
                             <WatchedMoviesList watched={watched} />
                         </>
                     )}
-                </Box>
-                <Box>
-                    <StarRating defaultRating={1} maxRating={10} />
                 </Box>
             </Main>
         </>
