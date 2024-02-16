@@ -1,7 +1,12 @@
 import { StarRating } from "../../StarRating";
 import { Plot } from "./Plot";
 
-export const MovieDetails = ({ selectedId, selectedMovie }) => {
+export const MovieDetails = ({
+    selectedId,
+    selectedMovie,
+    handleAddWatched,
+    handleAdd,
+}) => {
     return (
         <>
             <div className="details-overview">
@@ -23,6 +28,9 @@ export const MovieDetails = ({ selectedId, selectedMovie }) => {
             </div>
             <div className="details-section">
                 <StarRating maxRating={10} size={24} />
+                <button onClick={handleAdd} className="btn-add">
+                    + Add to list
+                </button>
                 <Plot selectedMovie={selectedMovie} />
             </div>
         </>
